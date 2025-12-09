@@ -10,6 +10,7 @@ interface Team {
 }
 
 interface Match {
+  id?: string;
   homeTeam: Team;
   awayTeam: Team;
   status: "FT" | "HT" | "LIVE" | "SCHEDULED";
@@ -69,6 +70,7 @@ export function adaptEventGroupsToMatches(
       })();
 
       return {
+        id: e.idEvent,
         homeTeam: {
           name: e.strHomeTeam,
           logo: e.strHomeTeamBadge || "",

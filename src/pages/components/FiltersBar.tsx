@@ -37,7 +37,7 @@ const FilterTabs = () => {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                "flex items-center gap-2 px-3 md:px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap",
+                "flex items-center gap-2 px-3 md:px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap",
                 activeTab === tab.id
                   ? "bg-[#02F1A1] text-[#0D0E16]"
                   : "text-white bg-[#1D1E2B]"

@@ -11,6 +11,7 @@ interface Team {
 }
 
 interface Match {
+  id?: string;
   homeTeam: Team;
   awayTeam: Team;
   status: "FT" | "HT" | "LIVE" | "SCHEDULED";
@@ -28,6 +29,7 @@ export default function LeagueSection(props: Props) {
     "matches" in props
       ? props.matches
       : props.events.map((e) => ({
+          id: e.idEvent,
           homeTeam: {
             name: e.strHomeTeam,
             logo: e.strHomeTeamBadge || "",
@@ -39,18 +41,18 @@ export default function LeagueSection(props: Props) {
             score: e.intAwayScore ?? 0,
           },
           status: (e.strStatus ?? "").toUpperCase().includes("FT")
-      ? "FT"
-      : (e.strStatus ?? "").toUpperCase().includes("HT")
-      ? "HT"
-      : e.intHomeScore != null || e.intAwayScore != null
-      ? "LIVE"
-      : "SCHEDULED",
-    time: e.strTime ?? undefined,
-    minute: (() => {
-      const m = (e.strStatus ?? "").match(/\d+/);
-      return m ? parseInt(m[0], 10) : undefined;
-    })(),
-  }));
+            ? "FT"
+            : (e.strStatus ?? "").toUpperCase().includes("HT")
+            ? "HT"
+            : e.intHomeScore != null || e.intAwayScore != null
+            ? "LIVE"
+            : "SCHEDULED",
+          time: e.strTime ?? undefined,
+          minute: (() => {
+            const m = (e.strStatus ?? "").match(/\d+/);
+            return m ? parseInt(m[0], 10) : undefined;
+          })(),
+        }));
 
   return (
     <div className="bg-[#1D1E2B] rounded-lg overflow-hidden w-full mx-auto">

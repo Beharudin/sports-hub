@@ -1,5 +1,6 @@
 import { Check, MoreVertical } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { useNavigate } from "react-router-dom";
 
 interface Team {
   name: string;
@@ -11,6 +12,7 @@ interface Team {
 }
 
 interface MatchCardProps {
+  id?: string;
   homeTeam: Team;
   awayTeam: Team;
   status: "FT" | "HT" | "LIVE" | "SCHEDULED";
@@ -20,6 +22,7 @@ interface MatchCardProps {
 }
 
 const MatchCard = ({
+  id,
   homeTeam,
   awayTeam,
   status,
@@ -35,21 +38,27 @@ const MatchCard = ({
     return "bg-gray-500";
   }
 
+  const navigate = useNavigate();
+
   return (
-    <div className="transition-colors px-4 py-3 cursor-pointer">
+    <div
+      className="transition-colors px-4 py-3 cursor-pointer"
+      onClick={id ? () => navigate(`/match/${id}`) : undefined}
+      role="button"
+    >
       <div className="flex items-center border-b border-[#292B41] py-2">
         <div className={cn("w-1 rounded h-16 bg-gray-500", barColor(status))} />
-        <div className="w-20 shrink-0 flex flex-col items-center">
+        <div className="w-12 md:w-20 shrink-0 flex flex-col items-center">
           {status === "LIVE" ? (
-            <div className="flex flex-col justify-center items-center h-16 w-20 relative">
+            <div className="flex flex-col justify-center items-center h-16 w-16 md:w-20 relative">
               <span className="text-emerald-600 text-sm font-medium">
                 {minute != null ? `${minute}'` : phase ?? "LIVE"}
               </span>
               <div className="w-6 h-0.5 bg-emerald-500 mt-1 rounded-full" />
-              <div className="absolute top-0 left-0 h-full w-36 opacity-10 bg-linear-to-r from-emerald-500 via-emerald-200 to-emerald-0"></div>
+              <div className="absolute top-0 left-0 h-full w-16 md:w-36 opacity-10 bg-linear-to-r from-emerald-500 via-emerald-200 to-emerald-0"></div>
             </div>
           ) : status === "HT" ? (
-            <div className="flex flex-col justify-center items-center h-16 w-20 relative">
+            <div className="flex flex-col justify-center items-center h-16 w-16 md:w-20relative">
               <span className="text-emerald-600 text-sm font-medium">HT</span>
               <div className="w-6 h-0.5 bg-emerald-500 mt-1 rounded-full" />
               <div className="absolute top-0 left-0 h-full w-36 opacity-10 bg-linear-to-r from-emerald-500 via-emerald-200 to-emerald-0"></div>
@@ -57,7 +66,9 @@ const MatchCard = ({
           ) : status === "FT" ? (
             <span className="text-[#EE5E52] text-sm font-medium">FT</span>
           ) : (
-            <span className="text-muted-foreground text-sm">{time}</span>
+            <span className="text-muted-foreground text-sm ml-2 sm:ml-0">
+              {time}
+            </span>
           )}
         </div>
 
