@@ -35,7 +35,7 @@ export default function FixturesHeader() {
                 className={cn(
                   "px-3 text-sm text-white/80 hover:text-white",
                   label === "Matches" &&
-                    "font-semibold text-cyan-300 after:block after:h-px after:bg-cyan-300 after:mt-1"
+                    "font-semibold text-[#02F1A1] after:block after:h-px after:bg-[#02F1A1] after:mt-1"
                 )}
               >
                 {label}

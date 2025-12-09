@@ -8,7 +8,7 @@ export default function FixturesPage() {
   const { data = [], isLoading, error } = useFixtures();
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0D0E16] text-white">
+    <div className="min-h-screen flex flex-col gap-4 bg-[#0D0E16] text-white">
       <FixturesHeader />
       <CalendarBar />
       <FiltersBar />
