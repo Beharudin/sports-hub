@@ -29,7 +29,7 @@ const FilterTabs = () => {
   ];
 
   return (
-    <div className="px-4 pb-4">
+    <div className="px-4">
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-wrap md:flex-nowrap items-center gap-2 gap-y-2">
           {tabs.map((tab) => (

@@ -1,7 +1,9 @@
 import FixturesHeader from "../../components/common/header/Header";
 import CalendarBar from "../components/CalendarBar";
 import FiltersBar from "../components/FiltersBar";
-import LeagueSection from "../components/LeagueSection";
+import MatchesList, {
+  adaptEventGroupsToMatches,
+} from "../components/MatchesList";
 import { useFixtures } from "../hooks/use-fixtures";
 
 export default function FixturesPage() {
@@ -12,7 +14,7 @@ export default function FixturesPage() {
       <FixturesHeader />
       <CalendarBar />
       <FiltersBar />
-      <div className="mx-auto max-w-7xl px-4 ">
+      <div className="w-full flex justify-center mb-24">
         {isLoading && (
           <div className="mt-6 text-sm opacity-70">Loading matches…</div>
         )}
@@ -21,15 +23,9 @@ export default function FixturesPage() {
             Failed to load fixtures
           </div>
         )}
-        {!isLoading &&
-          !error &&
-          data.map((group) => (
-            <LeagueSection
-              key={group.league}
-              league={group.league}
-              events={group.events}
-            />
-          ))}
+        {!isLoading && !error && (
+          <MatchesList groups={adaptEventGroupsToMatches(data)} />
+        )}
       </div>
     </div>
   );

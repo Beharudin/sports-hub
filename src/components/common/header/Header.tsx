@@ -23,7 +23,7 @@ export default function FixturesHeader() {
   const [open, setOpen] = useState(false);
   return (
     <div className="w-full bg-[#6D00FF] text-white fixed z-100">
-      <div className="mx-2 sm:mx-4  sm:px-4 h-[60px] flex items-center justify-between">
+      <div className="mx-2 sm:mx-4 sm:px-4 h-[60px] flex items-center justify-between">
         <div className="flex items-center">
           <img src={Logo} alt="statscore" className="h-8 sm:h-10 w-auto" />
         </div>
