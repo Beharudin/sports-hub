@@ -1,4 +1,4 @@
 export const ROUTES = {
-  fixtures: "/fixtures",
+  fixtures: "/",
   matchById: "/match/:id",
 };
