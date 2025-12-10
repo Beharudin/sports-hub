@@ -1,4 +1,3 @@
-import FixturesHeader from "../../components/common/header/Header";
 import CalendarBar from "../components/CalendarBar";
 import FiltersBar from "../components/FiltersBar";
 import MatchesList, {
@@ -10,8 +9,7 @@ export default function FixturesPage() {
   const { data = [], isLoading, error } = useFixtures();
 
   return (
-    <div className="min-h-screen flex flex-col gap-4 bg-[#0D0E16] text-white">
-      <FixturesHeader />
+    <div className="flex flex-col gap-4">
       <CalendarBar />
       <FiltersBar />
       <div className="w-full flex justify-center mb-24">

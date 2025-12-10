@@ -1,136 +1,216 @@
-import { useParams } from "react-router-dom";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../components/ui/tabs";
-import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../../components/ui/tabs";
 import { cn } from "../../lib/utils";
+import { EventsSection } from "../components/EventsSection";
 import { useMatchDetails } from "../hooks/use-match-details";
+
+const MOCK_EVENT = {
+  strHomeTeam: "Arsenal",
+  strAwayTeam: "Liverpool",
+  intHomeScore: 2,
+  intAwayScore: 1,
+  strHomeTeamBadge:
+    "https://r2.thesportsdb.com/images/media/team/badge/avi3bu1688678934.png",
+  strAwayTeamBadge:
+    "https://r2.thesportsdb.com/images/media/team/badge/yvxxrv1448808301.png",
+  strLeague: "English Premier League",
+  strStatus: "2H",
+  homeYellowCards: 2,
+  homeRedCards: 0,
+  awayYellowCards: 1,
+  awayRedCards: 1,
+};
 
 export default function MatchDetailsPage() {
   const { id = "" } = useParams();
+  const navigate = useNavigate();
   const { data } = useMatchDetails(id);
-  const event = data?.event;
+  // const event = data?.event;
+  const event = MOCK_EVENT;
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6">
-      {event ? (
-        <>
-          <Header event={event} />
-          <Tabs defaultValue="events" className="mt-4">
-            <TabsList className="bg-secondary/30">
-              <TabsTrigger value="details">Details</TabsTrigger>
-              <TabsTrigger value="odds">Odds</TabsTrigger>
-              <TabsTrigger value="lineups">Lineups</TabsTrigger>
-              <TabsTrigger value="events">Events</TabsTrigger>
-              <TabsTrigger value="stats">Stats</TabsTrigger>
-            </TabsList>
-            <TabsContent value="events" className="mt-4">
-              <EventsTimeline />
-            </TabsContent>
-          </Tabs>
-        </>
-      ) : (
-        <div className="text-sm opacity-70">Loading match…</div>
-      )}
-    </div>
-  );
-}
-
-function Header({
-  event,
-}: {
-  event: {
-    strHomeTeam: string;
-    strAwayTeam: string;
-    intHomeScore: number | null;
-    intAwayScore: number | null;
-    strHomeTeamBadge?: string | null;
-    strAwayTeamBadge?: string | null;
-    strLeague: string | null;
-    strStatus: string | null;
-  };
-}) {
-  return (
-    <Card className="bg-card/60">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-xs text-muted-foreground">{event.strLeague ?? ""}</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-0">
-        <div className="flex items-center justify-between">
-          <Team name={event.strHomeTeam} badge={event.strHomeTeamBadge} />
-          <div className="text-center">
-            <div className="text-2xl font-bold">
-              {event.intHomeScore ?? "–"} <span className="opacity-70">:</span> {event.intAwayScore ?? "–"}
+    <div className="flex flex-col items-center mt-20">
+      <div className="w-full max-w-5xl">
+        {/* Tabs */}
+        <Tabs defaultValue="events" className="w-full">
+          <div className="bg-[#1D1E2B]">
+            {/* Header */}
+            <div className="px-4 py-4">
+              <button
+                onClick={() => navigate(-1)}
+                className="flex items-center gap-2 hover:cursor-pointer transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5" />
+                <span className="text-sm">
+                  {event.strLeague ?? "English Premier League"}
+                </span>
+              </button>
             </div>
-            <div className="text-xs text-muted-foreground">{event.strStatus ?? ""}</div>
+
+            {/* Match Info */}
+            <div className="px-4 py-6">
+              <div className="flex items-center justify-center gap-8">
+                {/* Home Team */}
+                <div className="flex flex-col items-center gap-2">
+                  <div className="relative">
+                    {event.strHomeTeamBadge ? (
+                      <img
+                        src={event.strHomeTeamBadge}
+                        alt={event.strHomeTeam}
+                        className="w-[42px] h-[42px] object-contain"
+                      />
+                    ) : (
+                      <div className="w-[42px] h-[42px] rounded-full bg-match-card flex items-center justify-center text-3xl">
+                        🔴
+                      </div>
+                    )}
+                    <div
+                      className={cn(
+                        "absolute top-0 flex gap-0.5",
+                        event.homeYellowCards && event.homeRedCards
+                          ? "-right-6"
+                          : "-right-4"
+                      )}
+                    >
+                      {event.homeYellowCards ? (
+                        <span className="bg-amber-400 text-[#111827] text-[10px] w-[10px] h-3 rounded-xs flex items-center justify-center font-medium">
+                          {event.homeYellowCards}
+                        </span>
+                      ) : null}
+                      {event.homeRedCards ? (
+                        <span className="bg-destructive text-[#111827] text-[10px] w-[10px] h-3 rounded-xs flex items-center justify-center font-medium">
+                          {event.homeRedCards}
+                        </span>
+                      ) : null}
+                    </div>
+                  </div>
+                  <span className="text-foreground text-sm font-medium">
+                    {event.strHomeTeam}
+                  </span>
+                </div>
+
+                {/* Score */}
+                <div className="flex flex-col items-center gap-1">
+                  <span className="text-[#E5E7EB] text-[11px] leading-[15px] font-normal text-center">
+                    11 AUG
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-foreground text-3xl font-bold">
+                      {event.intHomeScore ?? "–"}
+                    </span>
+                    <span className="text-muted-foreground text-2xl">-</span>
+                    <span className="text-foreground text-3xl font-bold">
+                      {event.intAwayScore ?? "–"}
+                    </span>
+                  </div>
+                  <span className="bg-success/20 text-success text-xs px-3 py-0.5 rounded-full">
+                    {event.strStatus === "FT"
+                      ? "Finished"
+                      : event.strStatus ?? "Scheduled"}
+                  </span>
+                </div>
+
+                {/* Away Team */}
+                <div className="flex flex-col items-center gap-2">
+                  <div className="relative">
+                    {event.strAwayTeamBadge ? (
+                      <img
+                        src={event.strAwayTeamBadge}
+                        alt={event.strAwayTeam}
+                        className="w-[42px] h-[42px] object-contain"
+                      />
+                    ) : (
+                      <div className="w-[42px] h-[42px] rounded-full bg-match-card flex items-center justify-center text-3xl">
+                        🔴
+                      </div>
+                    )}
+                    <div
+                      className={cn(
+                        "absolute -top-1 flex gap-0.5",
+                        event.awayYellowCards && event.awayRedCards
+                          ? "-right-6"
+                          : "-right-4"
+                      )}
+                    >
+                      {event.awayYellowCards ? (
+                        <span className="bg-amber-400 text-[#111827] text-[10px] w-[10px] h-3 rounded-xs flex items-center justify-center font-medium">
+                          {event.awayYellowCards}
+                        </span>
+                      ) : null}
+                      {event.awayRedCards ? (
+                        <span className="bg-destructive text-[#111827] text-[10px] w-[10px] h-3 rounded-xs flex items-center justify-center font-medium">
+                          {event.awayRedCards}
+                        </span>
+                      ) : null}
+                    </div>
+                  </div>
+                  <span className="text-foreground text-sm font-medium">
+                    {event.strAwayTeam}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <TabsList className="w-full justify-center bg-transparent border-b border-border rounded-none h-auto p-0 gap-0">
+              {[
+                "Details",
+                "Odds",
+                "Lineups",
+                "Events",
+                "Stats",
+                "Standings",
+              ].map((tab) => (
+                <TabsTrigger
+                  key={tab}
+                  value={tab.toLowerCase()}
+                  className="px-4 py-3 text-sm text-muted-foreground data-[state=active]:text-accent data-[state=active]:border-b-2 data-[state=active]:border-accent rounded-none bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                >
+                  {tab}
+                </TabsTrigger>
+              ))}
+            </TabsList>
           </div>
-          <Team name={event.strAwayTeam} badge={event.strAwayTeamBadge} />
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
 
-function Team({ name, badge }: { name: string; badge?: string | null }) {
-  return (
-    <div className="flex items-center gap-3">
-      {badge ? (
-        <img src={badge} alt={name} className="size-10 rounded bg-muted object-contain" />
-      ) : (
-        <div className="size-10 rounded bg-muted" />
-      )}
-      <div className="text-sm">{name}</div>
-    </div>
-  );
-}
+          <TabsContent value="events" className="mt-0">
+            <EventsSection />
+          </TabsContent>
 
-function EventsTimeline() {
-  // The hook's `select` builds and sorts a simple timeline from available details
-  const { id = "" } = useParams();
-  const { data } = useMatchDetails(id);
-  const items = data?.timeline ?? [];
+          <TabsContent value="details" className="p-4">
+            <div className="text-muted-foreground text-center py-8">
+              Match details coming soon
+            </div>
+          </TabsContent>
 
-  return (
-    <Card className="bg-card/60">
-      <CardHeader>
-        <CardTitle className="text-sm">Events</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="relative">
-          <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-muted" />
-          <ul className="space-y-5">
-            {items.map((ev, i) => (
-              <li key={i} className="flex items-center justify-between">
-                <SideEvent side="home" ev={ev} />
-                <div className="text-xs text-muted-foreground">{ev.minute ?? "—’"}</div>
-                <SideEvent side="away" ev={ev} />
-              </li>
-            ))}
-            {items.length === 0 && (
-              <div className="text-sm text-muted-foreground">No structured timeline available. Layout preserved.</div>
-            )}
-          </ul>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
+          <TabsContent value="odds" className="p-4">
+            <div className="text-muted-foreground text-center py-8">
+              Odds information coming soon
+            </div>
+          </TabsContent>
 
-function SideEvent({
-  side,
-  ev,
-}: {
-  side: "home" | "away";
-  ev: { side: "home" | "away"; player: string; type: "goal" | "yellow" | "red" | "sub" };
-}) {
-  const isVisible = ev.side === side;
-  const color =
-    ev.type === "goal" ? "bg-emerald-500/20 text-emerald-300" :
-    ev.type === "yellow" ? "bg-amber-500/20 text-amber-300" :
-    ev.type === "red" ? "bg-red-500/20 text-red-300" :
-    "bg-sky-500/20 text-sky-300";
+          <TabsContent value="lineups" className="p-4">
+            <div className="text-muted-foreground text-center py-8">
+              Lineups coming soon
+            </div>
+          </TabsContent>
 
-  return (
-    <div className={cn("w-2/5 rounded px-3 py-1 text-xs", isVisible ? color : "opacity-20")}>
-      {isVisible ? `${ev.player}` : ""}
+          <TabsContent value="stats" className="p-4">
+            <div className="text-muted-foreground text-center py-8">
+              Statistics coming soon
+            </div>
+          </TabsContent>
+
+          <TabsContent value="standings" className="p-4">
+            <div className="text-muted-foreground text-center py-8">
+              Standings coming soon
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 }
