@@ -7,7 +7,7 @@ import { ROUTES } from "./constants/routes";
 function App() {
   return (
     <Routes>
-      <Route element={<HomePage />}>
+      <Route path="/" element={<HomePage />}>
         <Route path={ROUTES.fixtures} element={<FixturesPage />} />
         <Route path={ROUTES.matchById} element={<MatchDetailsPage />} />
         <Route path="*" element={<Navigate to={ROUTES.fixtures} replace />} />
