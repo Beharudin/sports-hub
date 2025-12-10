@@ -45,5 +45,8 @@ export function useMatchDetails(id: string) {
       ].sort((a, b) => (a.minute ?? 0) - (b.minute ?? 0));
       return { event, timeline };
     },
+    enabled: !!id,
+    refetchInterval: 15000,
+    staleTime: 1000 * 15,
   });
 }
