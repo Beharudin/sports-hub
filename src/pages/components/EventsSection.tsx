@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { CornerFlag, GoalBall, Substitution } from "../../assets";
+import { CornerFlag, GoalBall, InjuryIcon, Substitution } from "../../assets";
 import { useMatchDetails } from "../hooks/use-match-details";
 
 type EventType =
@@ -37,7 +37,7 @@ const EventIcon = ({ type }: { type: EventType }) => {
     case "corner":
       return <img src={CornerFlag} alt="" className="w-3 h-3" />;
     case "injury":
-      return <span className="text-muted-foreground text-xs">🏥</span>;
+      return <img src={InjuryIcon} alt="" className="w-3 h-3" />;
     default:
       return null;
   }
@@ -154,7 +154,7 @@ export function EventsSection() {
   const { id = "" } = useParams();
   const { data } = useMatchDetails(id);
 
-  console.log(data)
+  console.log(data);
 
   // const timeline = data?.timeline ?? [];
 

@@ -8,6 +8,11 @@ export type TimelineEvent = {
   type: "goal" | "yellow" | "red" | "sub";
 };
 
+type UIState =
+  | { kind: "ready" }
+  | { kind: "empty"; message: string }
+  | { kind: "error"; message: string };
+
 function parseDetailString(
   s: string | null | undefined,
   side: "home" | "away",
@@ -22,12 +27,28 @@ function parseDetailString(
       const [minuteStr, ...rest] = entry.split(":");
       const player = rest.join(":").trim();
       const minute = Number(minuteStr);
-      return { minute: Number.isFinite(minute) ? minute : null, player, side, type };
+      return {
+        minute: Number.isFinite(minute) ? minute : null,
+        player,
+        side,
+        type,
+      };
     });
 }
 
+function getErrorMessage(e: unknown) {
+  if (typeof e === "string") return e;
+  if (e && typeof e === "object" && "message" in e)
+    return String((e as any).message);
+  return "Failed to load match details";
+}
+
 export function useMatchDetails(id: string) {
-  return useQuery({
+  const result = useQuery<
+    EventDetails | undefined,
+    Error,
+    { event: EventDetails | undefined; timeline: TimelineEvent[] }
+  >({
     queryKey: ["match", id],
     queryFn: async () => {
       const res = await Api.lookupEvent(id);
@@ -46,7 +67,19 @@ export function useMatchDetails(id: string) {
       return { event, timeline };
     },
     enabled: !!id,
+    retry: 2,
+    retryDelay: (attempt) => Math.min(30000, 1000 * 2 ** attempt),
+    placeholderData: undefined,
     refetchInterval: 15000,
     staleTime: 1000 * 15,
   });
+  const isEmpty =
+    result.isSuccess &&
+    (!result.data.event || result.data.timeline.length === 0);
+  const uiState: UIState = result.isError
+    ? { kind: "error", message: getErrorMessage(result.error) }
+    : isEmpty
+    ? { kind: "empty", message: "No match details available" }
+    : { kind: "ready" };
+  return { ...result, isEmpty, uiState };
 }

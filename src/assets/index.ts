@@ -5,5 +5,15 @@ import Flag from "./img/flag.png";
 import CornerFlag from "./img/corner-flag.svg";
 import Substitution from "./img/substitution.svg";
 import GoalBall from "./img/goal-ball.svg";
+import InjuryIcon from "./img/injuryIcon.png";
 
-export { Logo, Ball, Globe, Flag, CornerFlag, Substitution, GoalBall };
+export {
+  Logo,
+  Ball,
+  Globe,
+  Flag,
+  CornerFlag,
+  Substitution,
+  GoalBall,
+  InjuryIcon,
+};
