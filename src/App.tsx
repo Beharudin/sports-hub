@@ -2,14 +2,15 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/home/HomePage";
 import FixturesPage from "./pages/fixtures/Fixtures";
 import MatchDetailsPage from "./pages/match-details/MatchDetailsPage";
+import { ROUTES } from "./constants/routes";
 
 function App() {
   return (
     <Routes>
       <Route element={<HomePage />}>
-        <Route path="fixtures" element={<FixturesPage />} />
-        <Route path="match/:id" element={<MatchDetailsPage />} />
-        <Route path="*" element={<Navigate to="/fixtures" replace />} />
+        <Route path={ROUTES.fixtures} element={<FixturesPage />} />
+        <Route path={ROUTES.matchById} element={<MatchDetailsPage />} />
+        <Route path="*" element={<Navigate to={ROUTES.fixtures} replace />} />
       </Route>
     </Routes>
   );
