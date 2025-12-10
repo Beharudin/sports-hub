@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 interface Team {
   name: string;
   logo: string;
-  score: number;
+  score: string;
   aggregateScore?: number;
   badge?: string;
   card?: string;

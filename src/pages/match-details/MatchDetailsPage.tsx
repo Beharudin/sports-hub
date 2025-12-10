@@ -175,6 +175,7 @@ export default function MatchDetailsPage() {
   const { id = "" } = useParams();
   const navigate = useNavigate();
   const { data } = useMatchDetails(id);
+  console.log(data)
   // const event = data?.event;
   const event = {
     idEvent: "999001",

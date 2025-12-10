@@ -154,6 +154,8 @@ export function EventsSection() {
   const { id = "" } = useParams();
   const { data } = useMatchDetails(id);
 
+  console.log(data)
+
   // const timeline = data?.timeline ?? [];
 
   const timeline: MatchEvent[] = [

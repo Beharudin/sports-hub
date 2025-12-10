@@ -4,7 +4,7 @@ import type { TSEvent } from "../../constants/api";
 interface Team {
   name: string;
   logo: string;
-  score: number;
+  score: string;
   aggregateScore?: number;
   badge?: string;
 }
@@ -28,7 +28,11 @@ export default function MatchesList({ groups }: { groups: LeagueGroup[] }) {
   return (
     <div className="space-y-6 w-full max-w-5xl">
       {groups.map((g, idx) => (
-        <LeagueSection key={idx} leagueName={g.leagueName} matches={g.matches} />
+        <LeagueSection
+          key={idx}
+          leagueName={g.leagueName}
+          matches={g.matches}
+        />
       ))}
     </div>
   );
@@ -66,7 +70,11 @@ export function adaptEventGroupsToMatches(
       const time = (() => {
         if (e.strTimestamp) {
           const d = new Date(e.strTimestamp);
-          if (!isNaN(d.getTime())) return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+          if (!isNaN(d.getTime()))
+            return d.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
         }
         return e.strTime ?? undefined;
       })();
@@ -81,12 +89,12 @@ export function adaptEventGroupsToMatches(
         homeTeam: {
           name: e.strHomeTeam,
           logo: (e.strHomeTeamBadge ?? "").replace(/\\\//g, "/"),
-          score: homeScore,
+          score: String(homeScore),
         },
         awayTeam: {
           name: e.strAwayTeam,
           logo: (e.strAwayTeamBadge ?? "").replace(/\\\//g, "/"),
-          score: awayScore,
+          score: String(awayScore),
         },
         status,
         time,

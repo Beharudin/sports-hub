@@ -5,7 +5,7 @@ import type { TSEvent } from "../../constants/api";
 interface Team {
   name: string;
   logo: string;
-  score: number;
+  score: string;
   aggregateScore?: number;
   badge?: string;
 }
@@ -33,12 +33,12 @@ export default function LeagueSection(props: Props) {
           homeTeam: {
             name: e.strHomeTeam,
             logo: e.strHomeTeamBadge || "",
-            score: e.intHomeScore ?? 0,
+            score: e.intHomeScore ?? "0",
           },
           awayTeam: {
             name: e.strAwayTeam,
             logo: e.strAwayTeamBadge || "",
-            score: e.intAwayScore ?? 0,
+            score: e.intAwayScore ?? "0",
           },
           status: (e.strStatus ?? "").toUpperCase().includes("FT")
             ? "FT"
