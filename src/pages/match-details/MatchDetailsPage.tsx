@@ -173,18 +173,18 @@ export default function MatchDetailsPage() {
   const event = MOCK_EVENT;
 
   return (
-    <div className="flex flex-col items-center mt-20">
+    <div className="flex flex-col items-center mt-12 pt-3 sm:pt-0 sm:mt-20">
       <div className="w-full max-w-5xl mb-10">
         {/* Tabs */}
         <Tabs defaultValue="events" className="w-full">
-          <div className="bg-[#1D1E2B] rounded-t-[8px]">
+          <div className="bg-[#1D1E2B] sm:rounded-t-[8px]">
             <HeaderBar
               league={event.strLeague ?? "English Premier League"}
               onBack={() => navigate(-1)}
             />
 
             <MatchInfo event={event} />
-            <TabsList className="w-full justify-center bg-transparent border-b border-[#292B41] rounded-none h-auto p-0 gap-0">
+            <TabsList className="w-full justify-center bg-transparent border-b border-[#292B41] rounded-none h-auto p-0 gap-0 mx-2 px-6 sm:ml-0 overflow-x-scroll">
               {[
                 "Details",
                 "Odds",
@@ -196,7 +196,7 @@ export default function MatchDetailsPage() {
                 <TabsTrigger
                   key={tab}
                   value={tab.toLowerCase()}
-                  className="px-4 py-3 text-sm text-[#D1D5DB] data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-[#00FFA5] rounded-none bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                  className="px-2 py-3 text-sm text-[#D1D5DB] data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-[#00FFA5] rounded-none bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none"
                 >
                   {tab}
                 </TabsTrigger>

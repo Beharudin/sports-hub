@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { CornerFlag, Substitution } from "../../assets";
+import { CornerFlag, GoalBall, Substitution } from "../../assets";
 import { useMatchDetails } from "../hooks/use-match-details";
 
 type EventType =
@@ -27,11 +27,7 @@ interface MatchEvent {
 const EventIcon = ({ type }: { type: EventType }) => {
   switch (type) {
     case "goal":
-      return (
-        <div className="w-8 h-6 bg-success rounded flex items-center justify-center">
-          <span className="text-success-foreground text-xs font-bold">⚽</span>
-        </div>
-      );
+      return <img src={GoalBall} alt="" className="w-3 h-3" />;
     case "yellow-card":
       return <div className="w-3 h-3 bg-yellow-400 rounded-xs" />;
     case "red-card":
@@ -217,7 +213,7 @@ const TimelineEvent = ({ event }: { event: MatchEvent }) => {
   const isHome = event.side === "home";
 
   return (
-    <div className="flex items-center py-2 relative">
+    <div className="flex items-center gap-x-20 py-2 relative">
       {/* Home Side */}
       <div
         className={`flex-1 flex items-center gap-3 ${
@@ -254,7 +250,10 @@ const TimelineEvent = ({ event }: { event: MatchEvent }) => {
       </div>
 
       {/* Minute Bubble */}
-      <div className="w-12 flex justify-center z-10">
+      {isHome && (
+        <div className="absolute top-1/2 right-1/2 mr-7 -translate-y-1/2 h-px w-4 bg-[#3A3D56]" />
+      )}
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[48px] flex justify-center z-10">
         {event.type === "goal" ? (
           <div className="min-w-[48px] h-[19px] px-2 py-[2px] rounded-[100px] bg-[#00FFA5] text-black text-[12px] leading-[16px] font-normal flex items-center justify-center">
             {event.minute}
@@ -265,6 +264,9 @@ const TimelineEvent = ({ event }: { event: MatchEvent }) => {
           </div>
         )}
       </div>
+      {!isHome && (
+        <div className="absolute top-1/2 left-1/2 ml-7 -translate-y-1/2 h-px w-4 bg-[#3A3D56]" />
+      )}
 
       {/* Away Side */}
       <div
@@ -307,7 +309,7 @@ export function EventsSection() {
   const { data } = useMatchDetails(id);
 
   return (
-    <div className="p-4 bg-[#1D1E2B] mt-4 rounded-t-[8px]">
+    <div className="p-4 mx-4 lg:mx-0 bg-[#1D1E2B] mt-4 rounded-t-[8px]">
       <h3 className="text-white text-[14px] leading-[20px] font-medium">
         Events
       </h3>
