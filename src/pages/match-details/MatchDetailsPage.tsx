@@ -27,6 +27,144 @@ const MOCK_EVENT = {
   awayRedCards: 1,
 };
 
+export function HeaderBar({
+  league,
+  onBack,
+}: {
+  league: string;
+  onBack: () => void;
+}) {
+  return (
+    <div className="px-4 py-4">
+      <button
+        onClick={onBack}
+        className="flex items-center gap-2 hover:cursor-pointer transition-colors"
+      >
+        <ArrowLeft className="w-5 h-5" />
+        <span className="text-white text-[14px] leading-[20px] font-normal">
+          {league}
+        </span>
+      </button>
+    </div>
+  );
+}
+
+export function TeamCrest({
+  badge,
+  name,
+  yellowCards = 0,
+  redCards = 0,
+  topClass = "top-0",
+}: {
+  badge?: string | null;
+  name: string;
+  yellowCards?: number;
+  redCards?: number;
+  topClass?: string;
+}) {
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <div className="relative">
+        {badge ? (
+          <img
+            src={badge}
+            alt={name}
+            className="w-[42px] h-[42px] object-contain"
+          />
+        ) : (
+          <div className="w-[42px] h-[42px] rounded-full bg-match-card flex items-center justify-center text-3xl">
+            🔴
+          </div>
+        )}
+        <div
+          className={cn(
+            "absolute flex gap-0.5",
+            topClass,
+            yellowCards && redCards ? "-right-6" : "-right-4"
+          )}
+        >
+          {yellowCards ? (
+            <span className="bg-amber-400 text-[#111827] text-[10px] w-[10px] h-3 rounded-xs flex items-center justify-center font-medium">
+              {yellowCards}
+            </span>
+          ) : null}
+          {redCards ? (
+            <span className="bg-destructive text-[#111827] text-[10px] w-[10px] h-3 rounded-xs flex items-center justify-center font-medium">
+              {redCards}
+            </span>
+          ) : null}
+        </div>
+      </div>
+      <span className="text-white text-[14px] leading-[20px] font-medium text-center">
+        {name}
+      </span>
+    </div>
+  );
+}
+
+export function ScoreBlock({
+  dateLabel,
+  homeScore,
+  awayScore,
+  status,
+}: {
+  dateLabel: string;
+  homeScore: number | null;
+  awayScore: number | null;
+  status: string | null;
+}) {
+  return (
+    <div className="flex flex-col items-center gap-1">
+      <span className="text-[#E5E7EB] text-[11px] leading-[15px] font-normal text-center">
+        {dateLabel}
+      </span>
+      <div className="flex items-center gap-2">
+        <span className="text-white text-[22px] leading-[28px] font-semibold text-center">
+          {homeScore ?? "–"}
+        </span>
+        <span className="text-white text-[22px] leading-[28px] font-semibold text-center">
+          -
+        </span>
+        <span className="text-white text-[22px] leading-[28px] font-semibold text-center">
+          {awayScore ?? "–"}
+        </span>
+      </div>
+      <span className="bg-success/20 text-success text-xs px-3 py-0.5 rounded-full">
+        {status === "FT" ? "Finished" : status ?? "Scheduled"}
+      </span>
+    </div>
+  );
+}
+
+export function MatchInfo({ event }: { event: typeof MOCK_EVENT }) {
+  return (
+    <div className="px-4 py-6">
+      <div className="flex items-center justify-center gap-8">
+        <TeamCrest
+          badge={event.strHomeTeamBadge}
+          name={event.strHomeTeam}
+          yellowCards={event.homeYellowCards}
+          redCards={event.homeRedCards}
+          topClass="top-0"
+        />
+        <ScoreBlock
+          dateLabel="11 AUG"
+          homeScore={event.intHomeScore}
+          awayScore={event.intAwayScore}
+          status={event.strStatus}
+        />
+        <TeamCrest
+          badge={event.strAwayTeamBadge}
+          name={event.strAwayTeam}
+          yellowCards={event.awayYellowCards}
+          redCards={event.awayRedCards}
+          topClass="-top-1"
+        />
+      </div>
+    </div>
+  );
+}
+
 export default function MatchDetailsPage() {
   const { id = "" } = useParams();
   const navigate = useNavigate();
@@ -39,124 +177,14 @@ export default function MatchDetailsPage() {
       <div className="w-full max-w-5xl">
         {/* Tabs */}
         <Tabs defaultValue="events" className="w-full">
-          <div className="bg-[#1D1E2B]">
-            {/* Header */}
-            <div className="px-4 py-4">
-              <button
-                onClick={() => navigate(-1)}
-                className="flex items-center gap-2 hover:cursor-pointer transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5" />
-                <span className="text-sm">
-                  {event.strLeague ?? "English Premier League"}
-                </span>
-              </button>
-            </div>
+          <div className="bg-[#1D1E2B] rounded-t-[8px]">
+            <HeaderBar
+              league={event.strLeague ?? "English Premier League"}
+              onBack={() => navigate(-1)}
+            />
 
-            {/* Match Info */}
-            <div className="px-4 py-6">
-              <div className="flex items-center justify-center gap-8">
-                {/* Home Team */}
-                <div className="flex flex-col items-center gap-2">
-                  <div className="relative">
-                    {event.strHomeTeamBadge ? (
-                      <img
-                        src={event.strHomeTeamBadge}
-                        alt={event.strHomeTeam}
-                        className="w-[42px] h-[42px] object-contain"
-                      />
-                    ) : (
-                      <div className="w-[42px] h-[42px] rounded-full bg-match-card flex items-center justify-center text-3xl">
-                        🔴
-                      </div>
-                    )}
-                    <div
-                      className={cn(
-                        "absolute top-0 flex gap-0.5",
-                        event.homeYellowCards && event.homeRedCards
-                          ? "-right-6"
-                          : "-right-4"
-                      )}
-                    >
-                      {event.homeYellowCards ? (
-                        <span className="bg-amber-400 text-[#111827] text-[10px] w-[10px] h-3 rounded-xs flex items-center justify-center font-medium">
-                          {event.homeYellowCards}
-                        </span>
-                      ) : null}
-                      {event.homeRedCards ? (
-                        <span className="bg-destructive text-[#111827] text-[10px] w-[10px] h-3 rounded-xs flex items-center justify-center font-medium">
-                          {event.homeRedCards}
-                        </span>
-                      ) : null}
-                    </div>
-                  </div>
-                  <span className="text-foreground text-sm font-medium">
-                    {event.strHomeTeam}
-                  </span>
-                </div>
-
-                {/* Score */}
-                <div className="flex flex-col items-center gap-1">
-                  <span className="text-[#E5E7EB] text-[11px] leading-[15px] font-normal text-center">
-                    11 AUG
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-foreground text-3xl font-bold">
-                      {event.intHomeScore ?? "–"}
-                    </span>
-                    <span className="text-muted-foreground text-2xl">-</span>
-                    <span className="text-foreground text-3xl font-bold">
-                      {event.intAwayScore ?? "–"}
-                    </span>
-                  </div>
-                  <span className="bg-success/20 text-success text-xs px-3 py-0.5 rounded-full">
-                    {event.strStatus === "FT"
-                      ? "Finished"
-                      : event.strStatus ?? "Scheduled"}
-                  </span>
-                </div>
-
-                {/* Away Team */}
-                <div className="flex flex-col items-center gap-2">
-                  <div className="relative">
-                    {event.strAwayTeamBadge ? (
-                      <img
-                        src={event.strAwayTeamBadge}
-                        alt={event.strAwayTeam}
-                        className="w-[42px] h-[42px] object-contain"
-                      />
-                    ) : (
-                      <div className="w-[42px] h-[42px] rounded-full bg-match-card flex items-center justify-center text-3xl">
-                        🔴
-                      </div>
-                    )}
-                    <div
-                      className={cn(
-                        "absolute -top-1 flex gap-0.5",
-                        event.awayYellowCards && event.awayRedCards
-                          ? "-right-6"
-                          : "-right-4"
-                      )}
-                    >
-                      {event.awayYellowCards ? (
-                        <span className="bg-amber-400 text-[#111827] text-[10px] w-[10px] h-3 rounded-xs flex items-center justify-center font-medium">
-                          {event.awayYellowCards}
-                        </span>
-                      ) : null}
-                      {event.awayRedCards ? (
-                        <span className="bg-destructive text-[#111827] text-[10px] w-[10px] h-3 rounded-xs flex items-center justify-center font-medium">
-                          {event.awayRedCards}
-                        </span>
-                      ) : null}
-                    </div>
-                  </div>
-                  <span className="text-foreground text-sm font-medium">
-                    {event.strAwayTeam}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <TabsList className="w-full justify-center bg-transparent border-b border-border rounded-none h-auto p-0 gap-0">
+            <MatchInfo event={event} />
+            <TabsList className="w-full justify-center bg-transparent border-b border-[#292B41] rounded-none h-auto p-0 gap-0">
               {[
                 "Details",
                 "Odds",
@@ -168,7 +196,7 @@ export default function MatchDetailsPage() {
                 <TabsTrigger
                   key={tab}
                   value={tab.toLowerCase()}
-                  className="px-4 py-3 text-sm text-muted-foreground data-[state=active]:text-accent data-[state=active]:border-b-2 data-[state=active]:border-accent rounded-none bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                  className="px-4 py-3 text-sm text-[#D1D5DB] data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-[#00FFA5] rounded-none bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none"
                 >
                   {tab}
                 </TabsTrigger>
