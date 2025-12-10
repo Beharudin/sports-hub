@@ -26,8 +26,8 @@ export type TSEvent = {
   strSeason: string | null;
   strHomeTeam: string;
   strAwayTeam: string;
-  intHomeScore: number | null;
-  intAwayScore: number | null;
+  intHomeScore: string | null;
+  intAwayScore: string | null;
   strTimestamp: string | null;
   dateEvent: string | null;
   strTime: string | null;

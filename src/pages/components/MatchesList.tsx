@@ -45,11 +45,18 @@ export function adaptEventGroupsToMatches(
       const isHT = rawStatus.includes("HT");
       const isHalf = rawStatus === "1H" || rawStatus === "2H";
       const hasScore = e.intHomeScore != null || e.intAwayScore != null;
+      const ts = e.strTimestamp ? new Date(e.strTimestamp) : null;
+      const isPast = ts ? ts.getTime() < Date.now() : false;
+      const inferredFT = !rawStatus && hasScore && isPast;
       const status: "FT" | "HT" | "LIVE" | "SCHEDULED" = isFT
         ? "FT"
         : isHT
         ? "HT"
-        : isHalf || hasScore
+        : isHalf
+        ? "LIVE"
+        : inferredFT
+        ? "FT"
+        : hasScore
         ? "LIVE"
         : "SCHEDULED";
 
@@ -73,12 +80,12 @@ export function adaptEventGroupsToMatches(
         id: e.idEvent,
         homeTeam: {
           name: e.strHomeTeam,
-          logo: e.strHomeTeamBadge || "",
+          logo: (e.strHomeTeamBadge ?? "").replace(/\\\//g, "/"),
           score: homeScore,
         },
         awayTeam: {
           name: e.strAwayTeam,
-          logo: e.strAwayTeamBadge || "",
+          logo: (e.strAwayTeamBadge ?? "").replace(/\\\//g, "/"),
           score: awayScore,
         },
         status,

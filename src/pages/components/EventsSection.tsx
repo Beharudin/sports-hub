@@ -43,160 +43,6 @@ const EventIcon = ({ type }: { type: EventType }) => {
   }
 };
 
-const events: MatchEvent[] = [
-  {
-    id: "1",
-    type: "fulltime",
-    minute: "",
-    side: "center",
-    label: "Fulltime  2 - 1",
-  },
-  {
-    id: "2",
-    type: "substitution",
-    minute: "89'",
-    side: "home",
-    playerName: "Gyokores",
-    assistName: "Odegard",
-  },
-  {
-    id: "3",
-    type: "goal",
-    minute: "88'",
-    side: "away",
-    playerName: "Ekitike",
-    assistName: "Sallah",
-  },
-  {
-    id: "4",
-    type: "yellow-card",
-    minute: "78'",
-    side: "home",
-    playerName: "Saliba",
-  },
-  { id: "5", type: "corner", minute: "74'", side: "home", label: "3rd corner" },
-  {
-    id: "6",
-    type: "substitution",
-    minute: "67'",
-    side: "home",
-    playerName: "Rice",
-    assistName: "Zubemendi",
-  },
-  {
-    id: "7",
-    type: "substitution",
-    minute: "67'",
-    side: "away",
-    playerName: "Frimpong",
-    secondaryPlayerName: "Robertson",
-  },
-  {
-    id: "8",
-    type: "red-card",
-    minute: "66'",
-    side: "away",
-    playerName: "Van Dijk",
-    label: "Sent Off",
-  },
-  { id: "9", type: "goal", minute: "55'", side: "home", playerName: "Saka" },
-  {
-    id: "10",
-    type: "corner",
-    minute: "52'",
-    side: "home",
-    label: "5th corner",
-  },
-  {
-    id: "11",
-    type: "corner",
-    minute: "48'",
-    side: "away",
-    label: "3rd Corner",
-  },
-  {
-    id: "12",
-    type: "halftime",
-    minute: "",
-    side: "center",
-    label: "Halftime  1 - 0",
-  },
-  {
-    id: "13",
-    type: "corner",
-    minute: "45+2'",
-    side: "home",
-    label: "2nd corner",
-  },
-  {
-    id: "14",
-    type: "substitution",
-    minute: "45'",
-    side: "away",
-    playerName: "Jones",
-    assistName: "Mcalister",
-  },
-  {
-    id: "15",
-    type: "yellow-card",
-    minute: "44'",
-    side: "home",
-    playerName: "Gabriel",
-  },
-  {
-    id: "16",
-    type: "injury",
-    minute: "44'",
-    side: "away",
-    playerName: "Jones",
-    label: "Injured",
-  },
-  {
-    id: "17",
-    type: "corner",
-    minute: "36'",
-    side: "home",
-    label: "1st corner",
-  },
-  {
-    id: "18",
-    type: "yellow-card",
-    minute: "34'",
-    side: "away",
-    playerName: "Konate",
-  },
-  {
-    id: "19",
-    type: "goal",
-    minute: "25'",
-    side: "home",
-    playerName: "Gyokores",
-  },
-  {
-    id: "20",
-    type: "corner",
-    minute: "16'",
-    side: "away",
-    label: "2nd Corner",
-  },
-  {
-    id: "21",
-    type: "goal",
-    minute: "12'",
-    side: "home",
-    playerName: "Gyokores",
-    assistName: "Odegard",
-  },
-  { id: "22", type: "corner", minute: "3'", side: "away", label: "1st Corner" },
-  {
-    id: "23",
-    type: "kickoff",
-    minute: "",
-    side: "center",
-    label: "Kick Off -13:00",
-  },
-];
-
 const TimelineEvent = ({ event }: { event: MatchEvent }) => {
   if (event.side === "center") {
     return (
@@ -308,14 +154,176 @@ export function EventsSection() {
   const { id = "" } = useParams();
   const { data } = useMatchDetails(id);
 
+  // const timeline = data?.timeline ?? [];
+
+  const timeline: MatchEvent[] = [
+    {
+      id: "c-kickoff",
+      type: "kickoff",
+      minute: "",
+      side: "center",
+      label: "Kick Off - 15:00",
+    },
+
+    {
+      id: "h-goal-12",
+      type: "goal",
+      minute: "12'",
+      side: "home",
+      playerName: "Saka",
+      assistName: "Odegaard",
+    },
+    {
+      id: "a-corner-16",
+      type: "corner",
+      minute: "16'",
+      side: "away",
+      label: "2nd corner",
+    },
+    {
+      id: "h-goal-25",
+      type: "goal",
+      minute: "25'",
+      side: "home",
+      playerName: "Gyokores",
+    },
+    {
+      id: "a-yellow-34",
+      type: "yellow-card",
+      minute: "34'",
+      side: "away",
+      playerName: "Konate",
+    },
+    {
+      id: "h-corner-36",
+      type: "corner",
+      minute: "36'",
+      side: "home",
+      label: "1st corner",
+    },
+    {
+      id: "a-injury-44",
+      type: "injury",
+      minute: "44'",
+      side: "away",
+      playerName: "Jones",
+      label: "Injured",
+    },
+    {
+      id: "h-yellow-44",
+      type: "yellow-card",
+      minute: "44'",
+      side: "home",
+      playerName: "Gabriel",
+    },
+    {
+      id: "a-sub-45",
+      type: "substitution",
+      minute: "45'",
+      side: "away",
+      playerName: "Jones",
+      secondaryPlayerName: "McAlister",
+    },
+    {
+      id: "h-corner-45p2",
+      type: "corner",
+      minute: "45+2'",
+      side: "home",
+      label: "2nd corner",
+    },
+
+    {
+      id: "c-halftime",
+      type: "halftime",
+      minute: "",
+      side: "center",
+      label: "Halftime  1 - 0",
+    },
+
+    {
+      id: "h-corner-52",
+      type: "corner",
+      minute: "52'",
+      side: "home",
+      label: "5th corner",
+    },
+    {
+      id: "h-goal-55",
+      type: "goal",
+      minute: "55'",
+      side: "home",
+      playerName: "Saka",
+    },
+    {
+      id: "a-red-66",
+      type: "red-card",
+      minute: "66'",
+      side: "away",
+      playerName: "Van Dijk",
+      label: "Sent Off",
+    },
+    {
+      id: "h-sub-67",
+      type: "substitution",
+      minute: "67'",
+      side: "home",
+      playerName: "Rice",
+      assistName: "Zubimendi",
+    },
+    {
+      id: "a-sub-67b",
+      type: "substitution",
+      minute: "67'",
+      side: "away",
+      playerName: "Frimpong",
+      secondaryPlayerName: "Robertson",
+    },
+    {
+      id: "h-corner-74",
+      type: "corner",
+      minute: "74'",
+      side: "home",
+      label: "3rd corner",
+    },
+    {
+      id: "h-yellow-78",
+      type: "yellow-card",
+      minute: "78'",
+      side: "home",
+      playerName: "Saliba",
+    },
+    {
+      id: "a-goal-80",
+      type: "goal",
+      minute: "80'",
+      side: "away",
+      playerName: "Salah",
+    },
+    {
+      id: "h-goal-87",
+      type: "goal",
+      minute: "87'",
+      side: "home",
+      playerName: "Gyokores",
+    },
+
+    {
+      id: "c-fulltime",
+      type: "fulltime",
+      minute: "",
+      side: "center",
+      label: "Fulltime  2 - 1",
+    },
+  ];
+
   return (
     <div className="p-4 mx-4 lg:mx-0 bg-[#1D1E2B] mt-4 rounded-t-[8px]">
       <h3 className="text-white text-[14px] leading-[20px] font-medium">
         Events
       </h3>
       <div className="relative">
-        {events.map((event) => (
-          <TimelineEvent key={event.id} event={event} />
+        {timeline.map((t, i) => (
+          <TimelineEvent key={i} event={t} />
         ))}
       </div>
     </div>

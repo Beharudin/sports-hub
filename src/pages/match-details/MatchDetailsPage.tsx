@@ -6,26 +6,14 @@ import {
   TabsList,
   TabsTrigger,
 } from "../../components/ui/tabs";
+import { type EventDetails } from "../../constants/api";
 import { cn } from "../../lib/utils";
 import { EventsSection } from "../components/EventsSection";
 import { useMatchDetails } from "../hooks/use-match-details";
 
-const MOCK_EVENT = {
-  strHomeTeam: "Arsenal",
-  strAwayTeam: "Liverpool",
-  intHomeScore: 2,
-  intAwayScore: 1,
-  strHomeTeamBadge:
-    "https://r2.thesportsdb.com/images/media/team/badge/avi3bu1688678934.png",
-  strAwayTeamBadge:
-    "https://r2.thesportsdb.com/images/media/team/badge/yvxxrv1448808301.png",
-  strLeague: "English Premier League",
-  strStatus: "2H",
-  homeYellowCards: 2,
-  homeRedCards: 0,
-  awayYellowCards: 1,
-  awayRedCards: 1,
-};
+function cleanUrl(u?: string | null) {
+  return u ? u.replace(/\\\//g, "/") : undefined;
+}
 
 export function HeaderBar({
   league,
@@ -136,28 +124,46 @@ export function ScoreBlock({
   );
 }
 
-export function MatchInfo({ event }: { event: typeof MOCK_EVENT }) {
+export function MatchInfo({ event }: { event: EventDetails | undefined }) {
   return (
     <div className="px-4 py-6">
       <div className="flex items-center justify-center gap-8">
         <TeamCrest
-          badge={event.strHomeTeamBadge}
-          name={event.strHomeTeam}
-          yellowCards={event.homeYellowCards}
-          redCards={event.homeRedCards}
+          badge={cleanUrl(event?.strHomeTeamBadge)}
+          name={event?.strHomeTeam ?? ""}
+          yellowCards={
+            (event?.strHomeYellowCards ?? "").split(";").filter(Boolean).length
+          }
+          redCards={
+            (event?.strHomeRedCards ?? "").split(";").filter(Boolean).length
+          }
           topClass="top-0"
         />
         <ScoreBlock
-          dateLabel="11 AUG"
-          homeScore={event.intHomeScore}
-          awayScore={event.intAwayScore}
-          status={event.strStatus}
+          dateLabel={(() => {
+            const src = event?.dateEvent ?? event?.strTimestamp;
+            if (!src) return "";
+            return new Date(src)
+              .toLocaleDateString(undefined, { day: "2-digit", month: "short" })
+              .toUpperCase();
+          })()}
+          homeScore={
+            event?.intHomeScore != null ? Number(event.intHomeScore) : null
+          }
+          awayScore={
+            event?.intAwayScore != null ? Number(event.intAwayScore) : null
+          }
+          status={event?.strStatus ?? null}
         />
         <TeamCrest
-          badge={event.strAwayTeamBadge}
-          name={event.strAwayTeam}
-          yellowCards={event.awayYellowCards}
-          redCards={event.awayRedCards}
+          badge={cleanUrl(event?.strAwayTeamBadge)}
+          name={event?.strAwayTeam ?? ""}
+          yellowCards={
+            (event?.strAwayYellowCards ?? "").split(";").filter(Boolean).length
+          }
+          redCards={
+            (event?.strAwayRedCards ?? "").split(";").filter(Boolean).length
+          }
           topClass="-top-1"
         />
       </div>
@@ -170,7 +176,69 @@ export default function MatchDetailsPage() {
   const navigate = useNavigate();
   const { data } = useMatchDetails(id);
   // const event = data?.event;
-  const event = MOCK_EVENT;
+  const event = {
+    idEvent: "999001",
+    idAPIfootball: null,
+    strEvent: "Arsenal vs Liverpool",
+    strEventAlternate: "Liverpool @ Arsenal",
+    strFilename: "English Premier League 2025-08-11 Arsenal vs Liverpool",
+    strSport: "Soccer",
+    idLeague: "4328",
+    strLeague: "English Premier League",
+    strLeagueBadge:
+      "https://r2.thesportsdb.com/images/media/league/badge/dsnjpz1679951317.png",
+    strSeason: "2025-2026",
+    strDescriptionEN: "",
+    strHomeTeam: "Arsenal",
+    strAwayTeam: "Liverpool",
+    intHomeScore: "2",
+    intRound: "1",
+    intAwayScore: "1",
+    intSpectators: "60000",
+    strOfficial: null,
+    strTimestamp: "2025-08-11T15:00:00",
+    dateEvent: "2025-08-11",
+    dateEventLocal: "2025-08-11",
+    strTime: "15:00:00",
+    strTimeLocal: "15:00:00",
+    strGroup: null,
+    idHomeTeam: "133604",
+    strHomeTeamBadge:
+      "https://r2.thesportsdb.com/images/media/team/badge/yvxxrv1448808301.png",
+    idAwayTeam: "133602",
+    strAwayTeamBadge:
+      "https://r2.thesportsdb.com/images/media/team/badge/98wt4h1521144923.png",
+    intScore: null,
+    intScoreVotes: null,
+    strResult: "",
+    idVenue: "15403",
+    strVenue: "Emirates Stadium",
+    strCountry: "England",
+    strCity: "London",
+    strPoster: null,
+    strSquare: null,
+    strFanart: null,
+    strThumb: null,
+    strBanner: null,
+    strMap: null,
+    strTweet1: "",
+    strVideo: "",
+    strStatus: "2H",
+    strPostponed: "no",
+    strLocked: "unlocked",
+
+    strHomeGoalDetails: "55: Saka; 87: Gyokores",
+    strAwayGoalDetails: "80: Salah",
+
+    strHomeYellowCards: "46: Gabriel; 66: Rice",
+    strAwayYellowCards: "",
+
+    strHomeRedCards: "",
+    strAwayRedCards: "86: Van Dijk",
+
+    strHomeLineupSubstitutes: "Emile Smith Rowe; Eddie Nketiah",
+    strAwayLineupSubstitutes: "Curtis Jones; Harvey Elliott",
+  };
 
   return (
     <div className="flex flex-col items-center mt-12 pt-3 sm:pt-0 sm:mt-20">
@@ -179,7 +247,7 @@ export default function MatchDetailsPage() {
         <Tabs defaultValue="events" className="w-full">
           <div className="bg-[#1D1E2B] sm:rounded-t-[8px]">
             <HeaderBar
-              league={event.strLeague ?? "English Premier League"}
+              league={event?.strLeague ?? "English Premier League"}
               onBack={() => navigate(-1)}
             />
 
