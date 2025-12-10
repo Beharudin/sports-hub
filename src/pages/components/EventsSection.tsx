@@ -1,5 +1,5 @@
-import { Flag } from "lucide-react";
 import { useParams } from "react-router-dom";
+import { CornerFlag, Substitution } from "../../assets";
 import { useMatchDetails } from "../hooks/use-match-details";
 
 type EventType =
@@ -33,18 +33,13 @@ const EventIcon = ({ type }: { type: EventType }) => {
         </div>
       );
     case "yellow-card":
-      return <div className="w-3 h-4 bg-yellow-400 rounded-xs" />;
+      return <div className="w-3 h-3 bg-yellow-400 rounded-xs" />;
     case "red-card":
-      return <div className="w-3 h-4 bg-destructive rounded-xs" />;
+      return <div className="w-3 h-3 bg-destructive rounded-xs" />;
     case "substitution":
-      return (
-        <div className="flex flex-col">
-          <span className="text-success text-xs">↗</span>
-          <span className="text-destructive text-xs">↘</span>
-        </div>
-      );
+      return <img src={Substitution} alt="" className="w-3 h-3" />;
     case "corner":
-      return <Flag className="w-3 h-3 text-muted-foreground" />;
+      return <img src={CornerFlag} alt="" className="w-3 h-3" />;
     case "injury":
       return <span className="text-muted-foreground text-xs">🏥</span>;
     default:
@@ -210,11 +205,11 @@ const TimelineEvent = ({ event }: { event: MatchEvent }) => {
   if (event.side === "center") {
     return (
       <div className="flex items-center justify-center py-4">
-        <div className="flex-1 h-px bg-border" />
-        <span className="px-4 text-muted-foreground text-sm">
+        <div className="flex-1 h-px bg-[#292B41]" />
+        <span className="px-4 text-[#E5E7EB] text-[12px] leading-[16px] font-normal">
           {event.label}
         </span>
-        <div className="flex-1 h-px bg-border" />
+        <div className="flex-1 h-px bg-[#292B41]" />
       </div>
     );
   }
@@ -223,30 +218,32 @@ const TimelineEvent = ({ event }: { event: MatchEvent }) => {
 
   return (
     <div className="flex items-center py-2 relative">
-      {/* Center Line */}
-      <div className="absolute left-1/2 top-0 bottom-0 w-px bg-border -translate-x-1/2" />
-
       {/* Home Side */}
       <div
-        className={`flex-1 flex items-center gap-2 ${
+        className={`flex-1 flex items-center gap-3 ${
           isHome ? "justify-end pr-4" : ""
         }`}
       >
         {isHome && (
           <>
             {event.type === "corner" && event.label && (
-              <span className="text-muted-foreground text-sm">
+              <span className="text-white text-[12px] leading-[16px] font-normal">
                 {event.label}
               </span>
             )}
             {event.playerName && (
               <div className="text-right">
-                <span className="text-foreground text-sm">
+                <span className="text-white text-[12px] leading-[16px] font-normal">
                   {event.playerName}
                 </span>
                 {event.assistName && (
-                  <span className="text-muted-foreground text-xs block">
+                  <span className="text-[#6B7280] text-[12px] leading-[16px] font-normal block">
                     {event.assistName}
+                  </span>
+                )}
+                {event.label && event.type !== "corner" && (
+                  <span className="text-[#6B7280] text-[12px] leading-[16px] font-normal block">
+                    {event.label}
                   </span>
                 )}
               </div>
@@ -259,11 +256,11 @@ const TimelineEvent = ({ event }: { event: MatchEvent }) => {
       {/* Minute Bubble */}
       <div className="w-12 flex justify-center z-10">
         {event.type === "goal" ? (
-          <div className="bg-success text-success-foreground text-xs px-2 py-1 rounded font-medium">
+          <div className="min-w-[48px] h-[19px] px-2 py-[2px] rounded-[100px] bg-[#00FFA5] text-black text-[12px] leading-[16px] font-normal flex items-center justify-center">
             {event.minute}
           </div>
         ) : (
-          <div className="bg-match-card text-muted-foreground text-xs px-2 py-1 rounded border border-border">
+          <div className="min-w-[48px] h-[19px] px-2 py-[2px] rounded-[100px] bg-[#26273B] text-white text-[12px] leading-[16px] font-normal flex items-center justify-center">
             {event.minute}
           </div>
         )}
@@ -278,23 +275,23 @@ const TimelineEvent = ({ event }: { event: MatchEvent }) => {
             <EventIcon type={event.type} />
             {event.playerName && (
               <div>
-                <span className="text-foreground text-sm">
+                <span className="text-white text-[12px] leading-[16px] font-normal">
                   {event.playerName}
                 </span>
                 {event.assistName && (
-                  <span className="text-muted-foreground text-xs block">
+                  <span className="text-[#6B7280] text-[12px] leading-[16px] font-normal block">
                     {event.assistName}
                   </span>
                 )}
                 {event.label && event.type !== "corner" && (
-                  <span className="text-muted-foreground text-xs block">
+                  <span className="text-[#6B7280] text-[12px] leading-[16px] font-normal block">
                     {event.label}
                   </span>
                 )}
               </div>
             )}
             {event.type === "corner" && event.label && (
-              <span className="text-muted-foreground text-sm">
+              <span className="text-white text-[12px] leading-[16px] font-normal">
                 {event.label}
               </span>
             )}
@@ -310,8 +307,10 @@ export function EventsSection() {
   const { data } = useMatchDetails(id);
 
   return (
-    <div className="p-4 bg-[#1D1E2B] mt-4">
-      <h3 className="text-white font-medium">Events</h3>
+    <div className="p-4 bg-[#1D1E2B] mt-4 rounded-t-[8px]">
+      <h3 className="text-white text-[14px] leading-[20px] font-medium">
+        Events
+      </h3>
       <div className="relative">
         {events.map((event) => (
           <TimelineEvent key={event.id} event={event} />

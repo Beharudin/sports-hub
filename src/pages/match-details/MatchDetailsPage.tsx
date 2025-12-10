@@ -174,7 +174,7 @@ export default function MatchDetailsPage() {
 
   return (
     <div className="flex flex-col items-center mt-20">
-      <div className="w-full max-w-5xl">
+      <div className="w-full max-w-5xl mb-10">
         {/* Tabs */}
         <Tabs defaultValue="events" className="w-full">
           <div className="bg-[#1D1E2B] rounded-t-[8px]">
